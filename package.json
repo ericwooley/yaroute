@@ -1,6 +1,6 @@
 {
   "name": "yarouter",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Basic router",
   "main": "src/router.js",
   "repository": {
@@ -64,7 +64,6 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
-    "prepublish": "gulp browserify",
     "test": "gulp test",
     "coverage": "gulp coverage"
   }
