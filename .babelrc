@@ -1,7 +1,6 @@
 {
   "stage": 0,
   "optional": ["runtime"],
-  "plugins": ["uglify:after"],
   "env": {
     "development": {
       "extra": {

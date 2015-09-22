@@ -6,8 +6,7 @@ var $ = require('gulp-load-plugins')({
 });
 require('babel/register')
 const fs = require('fs');
-var browserify = require("browserify");
-var babelify = require("babelify");
+var babel = require('gulp-babel')
 const del = require('del');
 const path = require('path');
 const isparta = require('isparta');
@@ -59,13 +58,10 @@ gulp.task('lint:test', function() {
 });
 
 // Bundle our app for our unit tests
-gulp.task('browserify', function() {
-  // browserify("./src/router.js", { debug: dev })
-  // .transform(babelify)
-  // .bundle()
-  // .on("error", function (err) { console.log("Error : " + err.message); })
-  // .pipe(fs.createWriteStream("./dist.js"))
-  // .pipe(gulp.dest('./dist/'))
+gulp.task('build', function() {
+  gulp.src('src/*.js')
+    .pipe(babel())
+    .pipe(gulp.dest('dist'));
 });
 function test(reporter) {
   return gulp.src('__tests__/**/*.js')
@@ -78,7 +74,7 @@ gulp.task('coverage', function(done) {
 });
 
 // Lint and run our tests
-gulp.task('test', ['lint:src', 'lint:test', 'browserify'], function() {
+gulp.task('test', ['lint:src', 'lint:test', 'build'], function() {
   require('babel/register')({ modules: 'common' });
   return test('nyan');
 });
@@ -94,10 +90,10 @@ gulp.task('dev', function(cb) {
   dev = true;
   runSequence('build_in_sequence', 'test', 'watch-test', cb)
 })
-// Ensure that linting occurs before browserify runs. This prevents
+// Ensure that linting occurs before build runs. This prevents
 // the build from breaking due to poorly formatted code.
 gulp.task('build_in_sequence', function(callback) {
-  runSequence(['lint:src', 'lint:test'], 'browserify', callback);
+  runSequence(['lint:src', 'lint:test'], 'build', callback);
 });
 
 gulp.task('test-server', function(){

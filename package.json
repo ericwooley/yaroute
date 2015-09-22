@@ -1,8 +1,8 @@
 {
   "name": "yarouter",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Basic router",
-  "main": "src/router.js",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/ericwooley/yarouter.git"
@@ -64,6 +64,7 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
+    "prepublish": "gulp build",
     "test": "gulp test",
     "coverage": "gulp coverage"
   }
