@@ -88,7 +88,6 @@ var Router = (function () {
         }
       }
       this._eventHash[event] = newListeners;
-      console.log(this._eventHash);
     }
   }, {
     key: 'init',

@@ -68,7 +68,6 @@ var ParsedRoute = (function () {
   }, {
     key: 'valByDefinition',
     value: function valByDefinition(def) {
-      console.log(this._segmentDict);
       return this._segmentDict[def];
     }
   }, {
@@ -78,8 +77,10 @@ var ParsedRoute = (function () {
     }
   }, {
     key: 'updateLocation',
-    value: function updateLocation(newRoute) {
-      location.hash = newRoute;
+    value: function updateLocation() {
+      var newRoute = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
+
+      location.hash = newRoute.charAt(0) === '#' ? newRoute : '#' + newRoute;
     }
   }, {
     key: 'update',
@@ -87,7 +88,6 @@ var ParsedRoute = (function () {
       var newSegVars = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
       var newRouteArr = [];
-
       for (var i = 0; i < this._segmentArray.length; i++) {
         var originalSegment = this._segmentArray[i];
         var segmentInfo = this._parsedSegments[i];
@@ -139,9 +139,7 @@ var ParsedRoute = (function () {
       var parsedSegments = _ref3.parsedSegments;
       var routeSegments = _ref3.routeSegments;
 
-      console.log('segment', parsedSegments);
       this._segmentDict = parsedSegments.reduce(function (collector, seg, index) {
-        console.log(seg);
         collector[seg.id] = routeSegments[index];
         return collector;
       }, {});
