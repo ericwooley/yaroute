@@ -8,21 +8,16 @@
     "url": "https://github.com/ericwooley/yaroute.git"
   },
   "keywords": [
-    "boilerplate",
     "es6",
     "node",
-    "starter",
-    "kit",
-    "transpile",
-    "6to5",
-    "babel"
+    "router"
   ],
   "author": "Eric Wooley <ericwooley@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ericwooley/react-in-style/issues"
+    "url": "https://github.com/ericwooley/yaroute/issues"
   },
-  "homepage": "https://github.com/ericwooley/react-in-style",
+  "homepage": "https://github.com/ericwooley/yaroute",
   "devDependencies": {
     "babel": "^5.8.23",
     "babel-eslint": "^4.1.3",
