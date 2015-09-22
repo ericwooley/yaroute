@@ -1,11 +1,11 @@
 {
-  "name": "yaroute",
-  "version": "0.0.0",
+  "name": "yarouter",
+  "version": "0.0.1",
   "description": "Basic router",
   "main": "dist.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ericwooley/yaroute.git"
+    "url": "https://github.com/ericwooley/yarouter.git"
   },
   "keywords": [
     "es6",
@@ -15,9 +15,9 @@
   "author": "Eric Wooley <ericwooley@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ericwooley/yaroute/issues"
+    "url": "https://github.com/ericwooley/yarouter/issues"
   },
-  "homepage": "https://github.com/ericwooley/yaroute",
+  "homepage": "https://github.com/ericwooley/yarouter",
   "devDependencies": {
     "babel": "^5.8.23",
     "babel-eslint": "^4.1.3",
