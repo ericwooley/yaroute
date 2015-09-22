@@ -1,0 +1,12 @@
+# Save as .codeclimate.yml (note leading .) in project root directory
+languages:
+  Ruby: true
+  JavaScript: true
+  PHP: true
+exclude_paths:
+- "tmp/*"
+- "dist.js"
+- "test/*"
+- "gulpfile.js"
+- "__tests__"
+- "__tests__/*"

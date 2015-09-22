@@ -1,0 +1,7 @@
+{
+  "destinationFolder": "dist",
+  "exportFileName": "YARouter",
+  "entryFileName": "YARouter",
+  "exportVarName": "YARouter",
+  "mochaGlobals": ["stub", "spy", "expect"]
+}
