@@ -1,0 +1,10 @@
+{
+  "globals": {
+    "describe": true,
+    "it": true,
+    "beforeEach": true
+  },
+  "rules": {
+    "eslint no-unused-expressions": 2
+  }
+}

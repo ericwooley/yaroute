@@ -11,8 +11,8 @@ class Router {
   addRoute(route = '') {
     this.routes.push(new Route(route))
   }
-  routeChanged() {
-    const matchingRoute = this.findMatchingRoute(location.hash.slice(1))
+  routeChanged(newLocation = location.hash.slice(1)) {
+    const matchingRoute = this.findMatchingRoute(newLocation)
     if (matchingRoute) this.trigger('change', matchingRoute)
   }
   findMatchingRoute(route) {

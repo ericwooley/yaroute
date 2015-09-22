@@ -1,14 +1,14 @@
-"use strict";
+'use strict';
 
-var _createClass = require("babel-runtime/helpers/create-class")["default"];
+var _createClass = require('babel-runtime/helpers/create-class')['default'];
 
-var _classCallCheck = require("babel-runtime/helpers/class-call-check")["default"];
+var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
 
-var _toConsumableArray = require("babel-runtime/helpers/to-consumable-array")["default"];
+var _toConsumableArray = require('babel-runtime/helpers/to-consumable-array')['default'];
 
-var _Object$assign = require("babel-runtime/core-js/object/assign")["default"];
+var _Object$assign = require('babel-runtime/core-js/object/assign')['default'];
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
@@ -25,62 +25,91 @@ var ParsedRoute = (function () {
     this._definition = routeDefinition;
     this._segmentArray = [].concat(_toConsumableArray(routeSegments));
     this._segmentIndex = 0;
+    this._parsedSegments = parsedSegments;
     this._routeObject = {};
     this._parseSegments({ parsedSegments: parsedSegments, routeSegments: routeSegments, routeDefinition: routeDefinition, route: route });
     this._indexSegments({ parsedSegments: parsedSegments, routeSegments: routeSegments });
   }
 
   _createClass(ParsedRoute, [{
-    key: "segment",
+    key: 'segment',
     value: function segment() {
       return this._segmentArray[this._segmentIndex];
     }
   }, {
-    key: "next",
+    key: 'next',
     value: function next() {
       this._segmentIndex = Math.min(this._segmentIndex + 1, this._segmentArray.length);
       return this;
     }
   }, {
-    key: "prev",
+    key: 'prev',
     value: function prev() {
       this._segmentIndex = Math.max(this._segmentIndex - 1, 0);
       return this;
     }
   }, {
-    key: "beginning",
+    key: 'beginning',
     value: function beginning() {
       this._segmentIndex = 0;
       return this;
     }
   }, {
-    key: "end",
+    key: 'end',
     value: function end() {
       this._segmentIndex = this._segmentArray.length - 1;
       return this;
     }
   }, {
-    key: "toObj",
+    key: 'toObj',
     value: function toObj() {
       return _Object$assign({}, this._segmentDict);
     }
   }, {
-    key: "valByDefinition",
+    key: 'valByDefinition',
     value: function valByDefinition(def) {
+      console.log(this._segmentDict);
       return this._segmentDict[def];
     }
   }, {
-    key: "objectify",
+    key: 'objectify',
     value: function objectify() {
       return _Object$assign({}, this._routeObject);
     }
   }, {
-    key: "_parseSegments",
+    key: 'updateLocation',
+    value: function updateLocation(newRoute) {
+      location.hash = newRoute;
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      var newSegVars = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+      var newRouteArr = [];
+
+      for (var i = 0; i < this._segmentArray.length; i++) {
+        var originalSegment = this._segmentArray[i];
+        var segmentInfo = this._parsedSegments[i];
+        var replacementValue = newSegVars[segmentInfo.id];
+        if (replacementValue) {
+          newRouteArr.push(replacementValue);
+        } else {
+          newRouteArr.push(originalSegment);
+        }
+      }
+      var newRoute = newRouteArr.join('/');
+      if (this._originalRoute.charAt(0) === '/') newRoute = '/' + newRoute;
+      if (this._originalRoute.charAt(this._originalRoute.length - 1) === '/') newRoute += '/';
+      this.updateLocation(newRoute);
+    }
+  }, {
+    key: '_parseSegments',
     value: function _parseSegments(_ref2) {
       var parsedSegments = _ref2.parsedSegments;
       var routeSegments = _ref2.routeSegments;
 
-      var routeObject = this._routeObject;
+      var routeObject = {};
       var last = routeObject;
 
       var _loop = function (i) {
@@ -89,29 +118,31 @@ var ParsedRoute = (function () {
 
         if (segment.isDymanic) {
           /* eslint-disable */
-          last[segment.value] = function () {
-            return segmentValue;
+          last[segment.id] = function () {
+            return segmentValue.substr(1);
           };
           /* eslint-enable */
         } else {
-            last[segment.value] = { segmentValue: segmentValue };
+            last[segment.id] = { segmentValue: segmentValue };
           }
-        last = last[segment.value];
+        last = last[segment.id];
       };
 
       for (var i = 0; i < parsedSegments.length; i++) {
         _loop(i);
       }
-      this._segmentIndex = 0;
+      this._routeObject = routeObject;
     }
   }, {
-    key: "_indexSegments",
+    key: '_indexSegments',
     value: function _indexSegments(_ref3) {
       var parsedSegments = _ref3.parsedSegments;
       var routeSegments = _ref3.routeSegments;
 
+      console.log('segment', parsedSegments);
       this._segmentDict = parsedSegments.reduce(function (collector, seg, index) {
-        collector[seg.value] = routeSegments[index];
+        console.log(seg);
+        collector[seg.id] = routeSegments[index];
         return collector;
       }, {});
     }
@@ -120,5 +151,5 @@ var ParsedRoute = (function () {
   return ParsedRoute;
 })();
 
-exports["default"] = ParsedRoute;
-module.exports = exports["default"];
+exports['default'] = ParsedRoute;
+module.exports = exports['default'];

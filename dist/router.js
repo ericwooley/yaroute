@@ -44,7 +44,9 @@ var Router = (function () {
   }, {
     key: 'routeChanged',
     value: function routeChanged() {
-      var matchingRoute = this.findMatchingRoute(location.hash.slice(1));
+      var newLocation = arguments.length <= 0 || arguments[0] === undefined ? location.hash.slice(1) : arguments[0];
+
+      var matchingRoute = this.findMatchingRoute(newLocation);
       if (matchingRoute) this.trigger('change', matchingRoute);
     }
   }, {
@@ -86,6 +88,7 @@ var Router = (function () {
         }
       }
       this._eventHash[event] = newListeners;
+      console.log(this._eventHash);
     }
   }, {
     key: 'init',

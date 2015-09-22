@@ -27,8 +27,8 @@ var Route = (function () {
         throw new Error('Cannot add route, ' + val + ' is a reserved word');
       }
       var isDymanic = val.indexOf(':') === 0;
-      var value = isDymanic ? val.slice(1) : val;
-      return { isDymanic: isDymanic, value: value };
+      var id = val;
+      return { isDymanic: isDymanic, id: id };
     });
   }
 
@@ -44,7 +44,7 @@ var Route = (function () {
       for (var i = 0; i < this.parsedSegments.length; i++) {
         var originalSegment = this.parsedSegments[i];
         var segment = routeSegments[i];
-        if (!originalSegment.isDymanic && originalSegment.value !== segment.toLowerCase()) {
+        if (!originalSegment.isDymanic && originalSegment.id !== segment.toLowerCase()) {
           return false;
         }
       }

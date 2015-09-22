@@ -7,6 +7,7 @@ var $ = require('gulp-load-plugins')({
 require('babel/register')
 const fs = require('fs');
 var babel = require('gulp-babel')
+const plumber = require('gulp-plumber')
 const del = require('del');
 const path = require('path');
 const isparta = require('isparta');
@@ -63,28 +64,30 @@ gulp.task('build', function() {
     .pipe(babel())
     .pipe(gulp.dest('dist'));
 });
-function test(reporter) {
+function handleError(err) {
+  console.log(err.toString());
+  this.emit('end');
+}
+
+function runTest(reporter) {
   return gulp.src('__tests__/**/*.js')
     .pipe(mocha({reporter: reporter}))
+    .on("error", (dev ? handleError : function(){}) );
 }
 
 // Use `npm coverage` instead, this may or may not work
 gulp.task('coverage', function(done) {
-  return test('mocha-lcov-reporter')
+  return runTest('mocha-lcov-reporter')
 });
 
 // Lint and run our tests
-gulp.task('test', ['lint:src', 'lint:test', 'build'], function() {
-  require('babel/register')({ modules: 'common' });
-  return test('nyan');
+gulp.task('test', function() {
+  return runTest('nyan');
 });
+
 gulp.task('watch-test', function() {
-  gulp.watch('./src/**/*.js', function() {
-    runSequence('build_in_sequence', 'test')
-  })
-  gulp.watch('./__tests__/**/*.js', function() {
-    runSequence('build_in_sequence', 'test')
-  })
+  gulp.watch('./src/**/*.js', ['test'])
+  gulp.watch('./__tests__/**/*.js', ['test'])
 })
 gulp.task('dev', function(cb) {
   dev = true;

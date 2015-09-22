@@ -8,8 +8,8 @@ class Route {
         throw new Error(`Cannot add route, ${val} is a reserved word`)
       }
       const isDymanic = val.indexOf(':') === 0
-      const value = isDymanic ? val.slice(1) : val
-      return {isDymanic, value}
+      const id = val
+      return {isDymanic, id}
     })
   }
   matches(route = '') {
@@ -20,7 +20,7 @@ class Route {
     for (let i = 0; i < this.parsedSegments.length; i++) {
       const originalSegment = this.parsedSegments[i]
       const segment = routeSegments[i]
-      if (!originalSegment.isDymanic && originalSegment.value !== segment.toLowerCase()) {
+      if (!originalSegment.isDymanic && originalSegment.id !== segment.toLowerCase()) {
         return false
       }
     }
