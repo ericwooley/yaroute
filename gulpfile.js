@@ -60,11 +60,11 @@ gulp.task('lint:test', function() {
 
 // Bundle our app for our unit tests
 gulp.task('browserify', function() {
-  browserify("./src/router.js", { debug: dev })
-  .transform(babelify)
-  .bundle()
-  .on("error", function (err) { console.log("Error : " + err.message); })
-  .pipe(fs.createWriteStream("./dist.js"))
+  // browserify("./src/router.js", { debug: dev })
+  // .transform(babelify)
+  // .bundle()
+  // .on("error", function (err) { console.log("Error : " + err.message); })
+  // .pipe(fs.createWriteStream("./dist.js"))
   // .pipe(gulp.dest('./dist/'))
 });
 function test(reporter) {
