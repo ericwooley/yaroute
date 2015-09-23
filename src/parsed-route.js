@@ -40,9 +40,6 @@ class ParsedRoute {
   }
   updateLocation(newRoute = '', pushState = false) {
     newRoute = newRoute.charAt(0) === '#' ? newRoute.substr(1) : newRoute
-    console.log(newRoute.split('/'))
-    console.log(newRoute.split('/').map(uri => encodeURIComponent(uri)))
-    console.log(newRoute.split('/').map(uri => encodeURIComponent(uri)).join('/'))
     newRoute = newRoute.split('/').map(uri => encodeURIComponent(uri)).join('/')
     if(pushState) {
       location.hash = newRoute
