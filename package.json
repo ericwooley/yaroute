@@ -1,6 +1,6 @@
 {
   "name": "yarouter",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Basic router",
   "main": "dist/index.js",
   "repository": {

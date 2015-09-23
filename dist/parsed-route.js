@@ -85,13 +85,6 @@ var ParsedRoute = (function () {
       var pushState = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
       newRoute = newRoute.charAt(0) === '#' ? newRoute.substr(1) : newRoute;
-      console.log(newRoute.split('/'));
-      console.log(newRoute.split('/').map(function (uri) {
-        return encodeURIComponent(uri);
-      }));
-      console.log(newRoute.split('/').map(function (uri) {
-        return encodeURIComponent(uri);
-      }).join('/'));
       newRoute = newRoute.split('/').map(function (uri) {
         return encodeURIComponent(uri);
       }).join('/');
