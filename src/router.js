@@ -8,12 +8,29 @@ class Router {
     }
     routes.forEach(this.addRoute.bind(this))
   }
+  static emptyRoute() {
+    const emptyRoute = new Route('')
+    return emptyRoute.toParsedRoute('')
+  }
   addRoute(route = '') {
     this.routes.push(new Route(route))
   }
-  routeChanged(newLocation = location.hash.slice(1)) {
-    const matchingRoute = this.findMatchingRoute(newLocation)
-    if (matchingRoute) this.trigger('change', matchingRoute)
+  getCurrentRoute() {
+
+  }
+  forceUpdate() {
+    this.routeChanged()
+  }
+  _routeChanged(newLocation = location.hash.slice(1)) {
+    // could be an event
+    if(typeof newLocation !== 'string') newLocation = location.hash
+    if(newLocation.charAt(0) === '#') newLocation = newLocation.substr(1)
+    console.log(newLocation)
+    const matchingRoute = this.getParsedRoute(newLocation)
+    this.trigger('change', matchingRoute)
+  }
+  getParsedRoute(route) {
+    return this.findMatchingRoute(route) || (new Route(route)).toParsedRoute(route)
   }
   findMatchingRoute(route) {
     for (let i = 0; i < this.routes.length; i++) {
@@ -45,8 +62,13 @@ class Router {
     this._eventHash[event] = newListeners
   }
   init() {
-    this._hashChangeListener = this.routeChanged.bind(this)
-    window.addEventListener('hashchange', this._hashChangeListener)
+    if(window && window.location) {
+      this._hashChangeListener = this._routeChanged.bind(this)
+      window.addEventListener('hashchange', this._hashChangeListener)
+      this._routeChanged(location.hash)
+    } else {
+      console.log('Non browser enviornment')
+    }
   }
   destroy() {
     window.removeEventListener('hashchange', this._hashChangeListener)

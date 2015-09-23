@@ -21,6 +21,9 @@ var ParsedRoute = (function () {
 
     _classCallCheck(this, ParsedRoute);
 
+    routeSegments = routeSegments.map(function (seg) {
+      return decodeURIComponent(seg);
+    });
     this._originalRoute = route;
     this._definition = routeDefinition;
     this._segmentArray = [].concat(_toConsumableArray(routeSegments));
@@ -66,8 +69,8 @@ var ParsedRoute = (function () {
       return _Object$assign({}, this._segmentDict);
     }
   }, {
-    key: 'valByDefinition',
-    value: function valByDefinition(def) {
+    key: 'getVal',
+    value: function getVal(def) {
       return this._segmentDict[def];
     }
   }, {
@@ -79,13 +82,30 @@ var ParsedRoute = (function () {
     key: 'updateLocation',
     value: function updateLocation() {
       var newRoute = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
+      var pushState = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
-      location.hash = newRoute.charAt(0) === '#' ? newRoute : '#' + newRoute;
+      newRoute = newRoute.charAt(0) === '#' ? newRoute.substr(1) : newRoute;
+      console.log(newRoute.split('/'));
+      console.log(newRoute.split('/').map(function (uri) {
+        return encodeURIComponent(uri);
+      }));
+      console.log(newRoute.split('/').map(function (uri) {
+        return encodeURIComponent(uri);
+      }).join('/'));
+      newRoute = newRoute.split('/').map(function (uri) {
+        return encodeURIComponent(uri);
+      }).join('/');
+      if (pushState) {
+        location.hash = newRoute;
+      } else {
+        history.replaceState(undefined, undefined, newRoute);
+      }
     }
   }, {
     key: 'update',
     value: function update() {
       var newSegVars = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+      var pushState = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
       var newRouteArr = [];
       for (var i = 0; i < this._segmentArray.length; i++) {
@@ -101,7 +121,7 @@ var ParsedRoute = (function () {
       var newRoute = newRouteArr.join('/');
       if (this._originalRoute.charAt(0) === '/') newRoute = '/' + newRoute;
       if (this._originalRoute.charAt(this._originalRoute.length - 1) === '/') newRoute += '/';
-      this.updateLocation(newRoute);
+      this.updateLocation(newRoute, pushState);
     }
   }, {
     key: '_parseSegments',

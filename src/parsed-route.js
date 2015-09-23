@@ -1,5 +1,6 @@
 class ParsedRoute {
   constructor({parsedSegments, routeSegments, routeDefinition, route}) {
+    routeSegments = routeSegments.map(seg => decodeURIComponent(seg))
     this._originalRoute = route
     this._definition = routeDefinition
     this._segmentArray = [...routeSegments]
@@ -31,16 +32,25 @@ class ParsedRoute {
   toObj() {
     return Object.assign({}, this._segmentDict)
   }
-  valByDefinition(def) {
+  getVal(def) {
     return this._segmentDict[def]
   }
   objectify() {
     return Object.assign({}, this._routeObject)
   }
-  updateLocation(newRoute = '') {
-    location.hash = newRoute.charAt(0) === '#' ? newRoute : '#' + newRoute
+  updateLocation(newRoute = '', pushState = false) {
+    newRoute = newRoute.charAt(0) === '#' ? newRoute.substr(1) : newRoute
+    console.log(newRoute.split('/'))
+    console.log(newRoute.split('/').map(uri => encodeURIComponent(uri)))
+    console.log(newRoute.split('/').map(uri => encodeURIComponent(uri)).join('/'))
+    newRoute = newRoute.split('/').map(uri => encodeURIComponent(uri)).join('/')
+    if(pushState) {
+      location.hash = newRoute
+    } else {
+      history.replaceState(undefined, undefined, newRoute)
+    }
   }
-  update(newSegVars = {}) {
+  update(newSegVars = {}, pushState = false) {
     const newRouteArr = []
     for (let i = 0; i < this._segmentArray.length; i++) {
       const originalSegment = this._segmentArray[i]
@@ -55,7 +65,7 @@ class ParsedRoute {
     let newRoute = newRouteArr.join('/')
     if(this._originalRoute.charAt(0) === '/') newRoute = '/' + newRoute
     if(this._originalRoute.charAt(this._originalRoute.length - 1) === '/') newRoute += '/'
-    this.updateLocation(newRoute)
+    this.updateLocation(newRoute, pushState)
   }
 
   _parseSegments({parsedSegments, routeSegments}) {

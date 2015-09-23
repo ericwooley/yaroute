@@ -42,12 +42,29 @@ var Router = (function () {
       this.routes.push(new _route2['default'](route));
     }
   }, {
-    key: 'routeChanged',
-    value: function routeChanged() {
+    key: 'getCurrentRoute',
+    value: function getCurrentRoute() {}
+  }, {
+    key: 'forceUpdate',
+    value: function forceUpdate() {
+      this.routeChanged();
+    }
+  }, {
+    key: '_routeChanged',
+    value: function _routeChanged() {
       var newLocation = arguments.length <= 0 || arguments[0] === undefined ? location.hash.slice(1) : arguments[0];
 
-      var matchingRoute = this.findMatchingRoute(newLocation);
-      if (matchingRoute) this.trigger('change', matchingRoute);
+      // could be an event
+      if (typeof newLocation !== 'string') newLocation = location.hash;
+      if (newLocation.charAt(0) === '#') newLocation = newLocation.substr(1);
+      console.log(newLocation);
+      var matchingRoute = this.getParsedRoute(newLocation);
+      this.trigger('change', matchingRoute);
+    }
+  }, {
+    key: 'getParsedRoute',
+    value: function getParsedRoute(route) {
+      return this.findMatchingRoute(route) || new _route2['default'](route).toParsedRoute(route);
     }
   }, {
     key: 'findMatchingRoute',
@@ -92,13 +109,24 @@ var Router = (function () {
   }, {
     key: 'init',
     value: function init() {
-      this._hashChangeListener = this.routeChanged.bind(this);
-      window.addEventListener('hashchange', this._hashChangeListener);
+      if (window && window.location) {
+        this._hashChangeListener = this._routeChanged.bind(this);
+        window.addEventListener('hashchange', this._hashChangeListener);
+        this._routeChanged(location.hash);
+      } else {
+        console.log('Non browser enviornment');
+      }
     }
   }, {
     key: 'destroy',
     value: function destroy() {
       window.removeEventListener('hashchange', this._hashChangeListener);
+    }
+  }], [{
+    key: 'emptyRoute',
+    value: function emptyRoute() {
+      var emptyRoute = new _route2['default']('');
+      return emptyRoute.toParsedRoute('');
     }
   }]);
 
